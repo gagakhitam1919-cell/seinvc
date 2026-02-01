@@ -221,7 +221,7 @@
         window.addEventListener('scroll', handleReveal);
         window.addEventListener('load', handleReveal);
 
-        // KONEKSI APP SCRIPT SINV3
+        // KONEKSI APP SCRIPT SINV3 (LINK TERPASANG)
         function prosesBayar(pkt, hrg, link) {
             const nama = document.getElementById('nama').value;
             const alamat = document.getElementById('alamat').value;
@@ -233,7 +233,9 @@
                 return;
             }
 
-            const scriptURL = "https://script.google.com/macros/s/AKfycbzi8f-WbEogCMZrosJ5f1Nyq-nVHGpPWPeNhFGlcVUIX790wezVwDNsUFuHx28LWBBm-g/exec";
+            // LINK APPS SCRIPT BOS SUDAH DIGABUNG DI SINI:
+            const scriptURL = "https://script.google.com/macros/s/AKfycbzo9pRrQNfW9UMNf_FX2ZV48VL-K85BezolDc3qCa9_GAAuJWHI6Yb_jDJstanI1WUv/exec";
+            
             const data = { nama, paket: pkt + " (" + hrg + ")", alamat, nohp, idpel: idpel || "No ID", kode: "SINV3" };
 
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
