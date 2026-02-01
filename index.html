@@ -221,7 +221,7 @@
         window.addEventListener('scroll', handleReveal);
         window.addEventListener('load', handleReveal);
 
-        // KONEKSI APP SCRIPT SINV3 (LINK TERPASANG)
+        // KONEKSI APP SCRIPT SINV3 (SUDAH UPDATE)
         function prosesBayar(pkt, hrg, link) {
             const nama = document.getElementById('nama').value;
             const alamat = document.getElementById('alamat').value;
@@ -233,13 +233,29 @@
                 return;
             }
 
-            // LINK APPS SCRIPT BOS SUDAH DIGABUNG DI SINI:
-            const scriptURL = "https://script.google.com/macros/s/AKfycbzqMLeUBrFFI7JxTUFCtUDugJ7hzUOAZjekK1oH7igwjy0VE7dHBcltQY7427PcGAro/exec";
+            // LINK BARU BOS SUDAH TERPASANG DI SINI
+            const scriptURL = "https://script.google.com/macros/s/AKfycbzo9pRrQNfW9UMNf_FX2ZV48VL-K85BezolDc3qCa9_GAAuJWHI6Yb_jDJstanI1WUv/exec";
             
-            const data = { nama, paket: pkt + " (" + hrg + ")", alamat, nohp, idpel: idpel || "No ID", kode: "SINV3" };
+            const data = { 
+                nama: nama, 
+                paket: pkt + " (" + hrg + ")", 
+                alamat: alamat, 
+                nohp: nohp, 
+                idpel: idpel || "No ID", 
+                kode: "SINV3" 
+            };
 
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-            window.location.href = link;
+            // Kirim data tanpa menunggu (agar cepat redirect)
+            fetch(scriptURL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                body: JSON.stringify(data) 
+            });
+
+            // Beri jeda 500ms agar fetch sempat jalan sebelum pindah halaman
+            setTimeout(() => {
+                window.location.href = link;
+            }, 500);
         }
 
         function copy(text, btn) {
