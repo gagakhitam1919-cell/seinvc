@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="robots" content="noindex, nofollow">
     <title>RKNET - PAYMENT GATEWAY SINV3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -43,9 +42,21 @@
             font-weight: 800; font-size: 10px; transition: 0.2s; box-shadow: 0 4px 12px rgba(0, 97, 255, 0.2);
         }
         .btn-pay:active { transform: scale(0.9); }
+
+        /* Layar Loading */
+        #loading-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            z-index: 9999; flex-direction: column; align-items: center; justify-content: center;
+            color: white; font-weight: bold; backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 <body class="antialiased">
+
+    <div id="loading-overlay">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 mb-4"></div>
+        <p>MENGHUBUNGKAN KE DANA...</p>
+    </div>
 
     <div class="max-w-md mx-auto min-h-screen bg-white shadow-2xl pb-10">
         
@@ -68,65 +79,53 @@
         </div>
 
         <div class="p-6 space-y-8">
-
-            <div class="notif-box reveal">
-                Silahkan Pilih Paket Sesuai Anda Berlangganan Dan Klik Tombol Bayar Berwarna Biru Di Samping Harga Paket Ya
-            </div>
-
-            <div class="notif-box bg-blue-50 border-blue-600 reveal">
-                Setelah Berhasil Melakukan Pembayaran Lewat DANA Harap Kirim Bukti Laporan Nya Ya Ke Admin RKNET. Tombol Bukti Pembayaran Ada Paling Bawah Ya Silahkan Cek Terimkasih 😊
-            </div>
-
-            <div class="notif-box bg-emerald-50 border-emerald-500 text-emerald-800 reveal">
-                Setelah Anda Klik Tombol Bayar, Anda Akan Di arahkan Ke Link DANA otomatis Oleh Sistem Kami Sesuai Paket Atau Nominal Yang Tertera !!!
-            </div>
+            <div class="notif-box reveal">Pilih Paket & Klik Tombol Bayar Biru Di Samping Harga.</div>
+            <div class="notif-box bg-blue-50 border-blue-600 reveal text-blue-800">Setelah Berhasil Bayar, Kirim Bukti Laporan Ke Admin Lewat Tombol Di Bawah.</div>
+            <div class="notif-box bg-emerald-50 border-emerald-500 text-emerald-800 reveal">Link DANA Akan Terbuka Otomatis Sesuai Paket Anda !!!</div>
 
             <section class="space-y-4 reveal">
                 <h3 class="text-xs font-black text-slate-800 uppercase italic px-2">Paket Internet Rumah</h3>
                 <div class="space-y-3">
                     <div class="flex justify-between items-center p-4 bg-white border-2 border-slate-50 rounded-2xl shadow-sm">
                         <span class="font-bold text-slate-700 text-sm italic">PAKET 10Mbps - 100.000</span>
-                        <button onclick="prosesBayar('10Mbps', '100.000', 'd10')" class="btn-pay">BAYAR</button>
+                        <button onclick="prosesBayar('10Mbps', '100.000', 'dana_10mbps')" class="btn-pay">BAYAR</button>
                     </div>
                     <div class="flex justify-between items-center p-4 bg-white border-2 border-slate-50 rounded-2xl shadow-sm">
                         <span class="font-bold text-slate-700 text-sm italic">PAKET 15Mbps - 150.000</span>
-                        <button onclick="prosesBayar('15Mbps', '150.000', 'd15')" class="btn-pay">BAYAR</button>
+                        <button onclick="prosesBayar('15Mbps', '150.000', 'dana_15mbps')" class="btn-pay">BAYAR</button>
                     </div>
                     <div class="flex justify-between items-center p-4 bg-white border-2 border-slate-50 rounded-2xl shadow-sm">
                         <span class="font-bold text-slate-700 text-sm italic">PAKET 20Mbps - 200.000</span>
-                        <button onclick="prosesBayar('20Mbps', '200.000', 'd20')" class="btn-pay">BAYAR</button>
+                        <button onclick="prosesBayar('20Mbps', '200.000', 'dana_20mbps')" class="btn-pay">BAYAR</button>
                     </div>
                     <div class="flex justify-between items-center p-4 bg-white border-2 border-slate-50 rounded-2xl shadow-sm">
                         <span class="font-bold text-slate-700 text-sm italic">PAKET 30Mbps - 250.000</span>
-                        <button onclick="prosesBayar('30Mbps', '250.000', 'd30')" class="btn-pay">BAYAR</button>
+                        <button onclick="prosesBayar('30Mbps', '250.000', 'dana_30mbps')" class="btn-pay">BAYAR</button>
                     </div>
                 </div>
             </section>
 
-            <div class="notif-box reveal">
-                Pembayaran Metode Transfer / QRIS Juga Bisa Loh Silahkan Salin No Rekening Nya😊
-            </div>
-
+            <div class="notif-box reveal">Transfer / QRIS Juga Bisa Silahkan Salin No Rekening Nya 😊</div>
             <section class="space-y-3 reveal">
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-3xl flex items-center shadow-sm">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" class="w-12 h-auto" alt="BCA">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" class="w-12 h-auto">
                     <div class="ml-4 flex-1">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">BANK BCA</p>
-                        <p id="bca-number" class="text-sm font-black text-slate-800">MEMUAT...</p>
+                        <p class="text-[9px] font-bold text-slate-400">BANK BCA</p>
+                        <p id="bca-number" class="text-sm font-black text-slate-800">7425092481</p>
                     </div>
-                    <button id="btn-copy-bca" class="text-blue-600 font-black text-xs uppercase italic">Salin</button>
+                    <button id="btn-copy-bca" onclick="copyText('7425092481', 'btn-copy-bca')" class="text-blue-600 font-black text-xs italic uppercase">Salin</button>
                 </div>
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-3xl flex items-center shadow-sm">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" class="w-12 h-auto" alt="Mandiri">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" class="w-12 h-auto">
                     <div class="ml-4 flex-1">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">BANK MANDIRI</p>
-                        <p id="mandiri-number" class="text-sm font-black text-slate-800">MEMUAT...</p>
+                        <p class="text-[9px] font-bold text-slate-400">BANK MANDIRI</p>
+                        <p id="mandiri-number" class="text-sm font-black text-slate-800">1730014990981</p>
                     </div>
-                    <button id="btn-copy-mandiri" class="text-blue-800 font-black text-xs uppercase italic">Salin</button>
+                    <button id="btn-copy-mandiri" onclick="copyText('1730014990981', 'btn-copy-mandiri')" class="text-blue-800 font-black text-xs italic uppercase">Salin</button>
                 </div>
             </section>
 
-            <button onclick="openQris()" class="w-full bg-white border-2 border-slate-900 p-5 rounded-3xl flex justify-center items-center font-black text-sm reveal shadow-lg active:scale-95 transition">
+            <button onclick="openQris()" class="w-full bg-white border-2 border-slate-900 p-5 rounded-3xl flex justify-center items-center font-black text-sm reveal shadow-lg">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" class="h-6 mr-3">SCAN QRIS OTOMATIS
             </button>
 
@@ -135,44 +134,36 @@
             </a>
 
             <div class="notif-box bg-slate-100 border-slate-800 text-slate-800 reveal">
-                <i class="fa-solid fa-motorcycle mr-2 text-xl"></i>Malas Transfer Mau Stanby Aja Dirumah ? <br> Tenang Teknisi Kami Bisa Jemput Pembayaran Kamu Loh Secara Cash / COD
+                <i class="fa-solid fa-motorcycle mr-2 text-xl"></i>Teknisi Kami Bisa Jemput Pembayaran Secara Cash / COD
             </div>
 
             <div class="grid grid-cols-2 gap-4 reveal">
-                <a id="link-wa-sopian" href="#" class="bg-white p-5 rounded-3xl flex flex-col items-center border border-slate-200 shadow-sm transition active:scale-95">
+                <a id="link-wa-sopian" href="#" class="bg-white p-5 rounded-3xl flex flex-col items-center border border-slate-200 shadow-sm">
                     <i class="fa-solid fa-user-gear text-blue-600 text-3xl mb-2"></i>
                     <span class="font-black text-[10px] italic">SOPIAN</span>
                 </a>
-                <a id="link-wa-rangga" href="#" class="bg-white p-5 rounded-3xl flex flex-col items-center border border-slate-200 shadow-sm transition active:scale-95">
+                <a id="link-wa-rangga" href="#" class="bg-white p-5 rounded-3xl flex flex-col items-center border border-slate-200 shadow-sm">
                     <i class="fa-solid fa-user-gear text-blue-600 text-3xl mb-2"></i>
                     <span class="font-black text-[10px] italic">RANGGA</span>
                 </a>
             </div>
 
             <section class="space-y-4 pt-6 border-t reveal">
-                <h3 class="text-xs font-black text-slate-800 uppercase italic px-2">Mau Internet Ketengan ??<p>Silahkan Pilih Paket Sesuai Kebutuhan Kamu</h3>
-                <div class="grid gap-3" id="ketengan-list">
-                    </div>
+                <h3 class="text-xs font-black text-slate-800 uppercase italic px-2">Mau Internet Ketengan ??</h3>
+                <div class="grid gap-3" id="ketengan-list"></div>
             </section>
 
-            <div class="notif-box bg-emerald-50 border-emerald-500 text-emerald-900 reveal">
-                Silahkan Klik Tombol Beli Anda Akan Diarahkan Ke Link DANA untuk Melakukan Pembayaran Voucher Hotspot
-            </div>
-            <div class="notif-box bg-emerald-600 text-white border-none reveal shadow-lg">
-                Setelah Pembayaran Berhasil Silahkan Klik Tombol Dibawah Untuk Kirim Bukti Pembelian Voucher Hotspot Dan Segera Akan Kami Kasih Kode Voucher Nya 😊
-            </div>
+            <div class="notif-box bg-emerald-600 text-white border-none reveal shadow-lg">Kirim Bukti Pembelian Voucher Ke Bang Komeng Untuk Dapat Kodenya 😊</div>
 
-            <a id="link-wa-komeng" href="#" class="w-full bg-emerald-700 text-white p-5 rounded-2xl flex justify-center items-center font-black text-sm reveal shadow-xl active:scale-95 transition">
+            <a id="link-wa-komeng" href="#" class="w-full bg-emerald-700 text-white p-5 rounded-2xl flex justify-center items-center font-black text-sm reveal shadow-xl">
                 <i class="fa-brands fa-whatsapp text-2xl mr-3"></i> BANG KOMENG
             </a>
 
             <section class="space-y-4 reveal pb-10">
                 <h3 class="text-xs font-black text-slate-400 uppercase italic px-2">Informasi & FAQ</h3>
                 <div class="bg-white border rounded-[2.5rem] p-6 space-y-4 text-[11px] font-bold text-slate-600 shadow-sm">
-                    <p>● Kapan internet saya aktif? <br><span class="font-normal text-slate-400 italic">Aktif otomatis 5-15 menit setelah sistem memverifikasi dana Anda.</span></p>
-                    <p>● Bagaimana cara dapat kode voucher? <br><span class="font-normal text-slate-400 italic">Kirim bukti pembayaran ke Bang Komeng di WhatsApp.</span></p>
-                    <p>● Modem tidak ada internet? <br><span class="font-normal text-slate-400 italic">Coba restart modem dengan mencabut adaptor selama 60 detik.</span></p>
-                    <p>● Support pembayaran apa saja? <br><span class="font-normal text-slate-400 italic">DANA, BCA, Mandiri, dan QRIS otomatis.</span></p>
+                    <p>● Kapan internet saya aktif? <br><span class="font-normal text-slate-400 italic">5-15 menit setelah verifikasi.</span></p>
+                    <p>● Modem tidak ada internet? <br><span class="font-normal text-slate-400 italic">Coba restart modem 60 detik.</span></p>
                 </div>
             </section>
         </div>
@@ -190,106 +181,105 @@
     </div>
 
     <script>
-        // Penyamaran URL dan variabel agar tidak terbaca bot GitHub
-        const _0x1 = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5VzdZQlFTdXlGNVJQUzgxeEx0bmxsaUM1NnhXTmI1X250VTdtVUJ2bkJKTGJXbW50bkRQb3ByMlFUMU1WSE9NT1h5US9leGVj";
-        const _0x2 = "aHR0cHM6Ly9saW5rLmRhbmEuaWQvbWludGE/ZnVsbF91cmw9aHR0cHM6Ly9xyi5kYW5hLmlkL3YxLw==";
-        
         const CONFIG = {
-            scriptURL: atob(_0x1),
-            bca: "7425092481",
-            mandiri: "1730014990981",
+            scriptURL: "https://script.google.com/macros/s/AKfycbyW7YBQSuyF5RPP81xLtnlliC56xWNb5_ntU7mUBvnBJLbWmntnDPopr2QT1MVHOMOXyQ/exec",
             waAdmin: "628816896891",
             waSopian: "6283866284797",
             waRangga: "6289639159295",
             waKomeng: "6282117189293",
             qrisImg: "https://i.ibb.co.com/KcQfhykQ/Screenshot-20251011-140306-DANA.jpg",
             qrisOwner: "RKNET OFFICIAL",
-            // Menggunakan kode pendek untuk memicu link asli via JS
-            dLinks: {
-                "d10": atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTQ0MzUwOTY2",
-                "d15": atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTMyNDg3MjA3",
-                "d20": atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTkzNDE2Mjc4",
-                "d30": atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTQwMzIyNzM5"
+            danaLinks: {
+                "dana_10mbps": "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020144350966",
+                "dana_15mbps": "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020132487207",
+                "dana_20mbps": "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020193416278",
+                "dana_30mbps": "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020144350966"
             },
             ketengan: [
-                { label: "2.000 - 3 Jam", link: atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTI3ODc2NTMx" },
-                { label: "3.000 - 6 Jam", link: atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTEyNDg3NzU4" },
-                { label: "5.000 - 24 Jam", link: atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTEzNTcxMjQw" },
-                { label: "50.000 - 30 Hari", link: atob(_0x2) + "MjgxMDEyMDkyMDI2MDIwMTIxMjc2MTgy" }
+                { label: "2.000 - 3 Jam", link: "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020127876531" },
+                { label: "3.000 - 6 Jam", link: "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020112487758" },
+                { label: "5.000 - 24 Jam", link: "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020113571240" },
+                { label: "50.000 - 30 Hari", link: "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012092026020121276182" }
             ]
         };
 
         function initData() {
-            document.getElementById('bca-number').innerText = CONFIG.bca;
-            document.getElementById('mandiri-number').innerText = CONFIG.mandiri;
-            document.getElementById('btn-copy-bca').onclick = () => copyText(CONFIG.bca, 'btn-copy-bca');
-            document.getElementById('btn-copy-mandiri').onclick = () => copyText(CONFIG.mandiri, 'btn-copy-mandiri');
-            document.getElementById('link-bukti-bayar').href = `https://wa.me/${CONFIG.waAdmin}?text=Konfirmasi%20Pembayaran`;
+            document.getElementById('link-bukti-bayar').href = `https://wa.me/${CONFIG.waAdmin}?text=Assalamu'alaikum%0ATeh%20Mau%20Upload%20Bukti%20Pembayaran%20Punten%20☺`;
             document.getElementById('link-wa-sopian').href = `https://wa.me/${CONFIG.waSopian}`;
             document.getElementById('link-wa-rangga').href = `https://wa.me/${CONFIG.waRangga}`;
-            document.getElementById('link-wa-komeng').href = `https://wa.me/${CONFIG.waKomeng}?text=Beli%20Voucher%20Hotspot`;
+            document.getElementById('link-wa-komeng').href = `https://wa.me/${CONFIG.waKomeng}?text=A%20Bade%20Kirim%20Bukti%20Pembelian%20Voucher%20Hotspot`;
             document.getElementById('qris-img').src = CONFIG.qrisImg;
             document.getElementById('qris-owner').innerText = CONFIG.qrisOwner;
 
             const ketenganContainer = document.getElementById('ketengan-list');
-            CONFIG.ketengan.forEach(item => {
-                const a = document.createElement('a');
-                a.href = item.link;
-                a.className = "flex justify-between items-center p-4 bg-white border border-emerald-100 rounded-2xl shadow-sm";
-                a.innerHTML = `<span class="font-bold text-slate-700 text-sm italic">${item.label}</span>
-                               <span class="bg-emerald-500 text-white px-5 py-2 rounded-xl font-black text-[10px] uppercase">Beli</span>`;
-                ketenganContainer.appendChild(a);
+            CONFIG.ketengan.forEach((item, index) => {
+                ketenganContainer.innerHTML += `
+                    <div onclick="prosesBayar('${item.label}', 'Voucher', 'ket_${index}')" class="flex justify-between items-center p-4 bg-white border border-emerald-100 rounded-2xl shadow-sm cursor-pointer">
+                        <span class="font-bold text-slate-700 text-sm italic">${item.label}</span>
+                        <span class="bg-emerald-500 text-white px-5 py-2 rounded-xl font-black text-[10px] uppercase">Beli</span>
+                    </div>`;
             });
         }
 
-        function handleReveal() {
-            const reveals = document.querySelectorAll('.reveal');
-            reveals.forEach((el, index) => {
-                const elementTop = el.getBoundingClientRect().top;
-                if (elementTop < window.innerHeight - 50) {
-                    setTimeout(() => { el.classList.add('active'); }, index * 80); 
-                }
-            });
-        }
+        async function prosesBayar(pkt, hrg, linkKey) {
+            const nama = document.getElementById('nama').value;
+            const alamat = document.getElementById('alamat').value;
+            const nohp = document.getElementById('nohp').value;
+            const idpel = document.getElementById('idpel').value;
 
-        function prosesBayar(pkt, hrg, key) {
-            const n = document.getElementById('nama').value;
-            const a = document.getElementById('alamat').value;
-            const w = document.getElementById('nohp').value;
-            const i = document.getElementById('idpel').value;
-
-            if(!n || !a || !w) {
-                alert("Data wajib diisi!");
+            if(!nama || !alamat || !nohp) {
+                alert("Mohon isi Nama, Alamat, dan No WA!");
                 return;
             }
 
-            const payload = { nama: n, paket: pkt + " (" + hrg + ")", alamat: a, nohp: w, idpel: i || "No ID" };
+            document.getElementById('loading-overlay').style.display = 'flex';
 
-            // Mengirim data secara silent
-            fetch(CONFIG.scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-            .then(() => {
-                window.location.href = CONFIG.dLinks[key];
-            })
-            .catch(() => {
-                window.location.href = CONFIG.dLinks[key];
-            });
+            const data = { nama, paket: pkt + " (" + hrg + ")", alamat, nohp, idpel: idpel || "No ID", kode: "SINV3" };
+
+            let targetLink = "";
+            if(linkKey.startsWith('ket_')) {
+                const idx = linkKey.split('_')[1];
+                targetLink = CONFIG.ketengan[idx].link;
+            } else {
+                targetLink = CONFIG.danaLinks[linkKey];
+            }
+
+            try {
+                // Gunakan fetch dengan timeout singkat
+                await fetch(CONFIG.scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                });
+                
+                // Jeda 1 detik agar proses Google Script selesai
+                setTimeout(() => {
+                    window.location.href = targetLink;
+                }, 1000);
+            } catch (e) {
+                window.location.href = targetLink;
+            }
         }
 
         function copyText(text, btnId) {
             navigator.clipboard.writeText(text);
             const btn = document.getElementById(btnId);
-            const ori = btn.innerText; btn.innerText = "COPIED";
-            setTimeout(() => { btn.innerText = ori; }, 2000);
+            btn.innerText = "COPIED";
+            setTimeout(() => { btn.innerText = "Salin"; }, 2000);
         }
 
         function openQris() { document.getElementById('qrisModal').classList.remove('hidden'); }
         function closeQris() { document.getElementById('qrisModal').classList.add('hidden'); }
+        function handleReveal() {
+            document.querySelectorAll('.reveal').forEach((el, index) => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+                    setTimeout(() => { el.classList.add('active'); }, index * 80); 
+                }
+            });
+        }
 
         window.addEventListener('scroll', handleReveal);
-        window.addEventListener('load', () => {
-            initData();
-            handleReveal();
-        });
+        window.addEventListener('load', () => { initData(); handleReveal(); });
     </script>
 </body>
 </html>
